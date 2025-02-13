@@ -46,7 +46,7 @@ def bot(bot_x, bot_y, player_x, player_y, obstacles):
     difx = player_x - bot_x
     dify = player_y - bot_y
     
-    # Try to move the bot towards the player
+    # Miscarea bot catre jucator
     if difx == 0 and dify < 0:
         if (bot_x, bot_y - 1) not in obstacles:
             bot_x, bot_y = bot_x, bot_y - 1
@@ -81,10 +81,11 @@ def bot(bot_x, bot_y, player_x, player_y, obstacles):
             bot_x, bot_y = bot_x - 1, bot_y
 
     return bot_x, bot_y
-walking=True
+
 # Bucla principala
 running = True
-player_moved = False  # Flag to track if the player has moved
+walking=True
+player_moved = False  # Verifica daca jucatorul s-a miscat
 
 while running:
     screen.fill(BLACK)  
@@ -141,16 +142,17 @@ while running:
     else: 
         new_x, new_y = player_x, player_y
 
-    # Only move the bot if the player has moved
+    # Miscarea bot conditionata de cea a jucatorului
     if player_moved:
-        bot_x, bot_y = bot(bot_x, bot_y, player_x, player_y, obstacles)  # Update bot position
-        player_moved = False  # Reset flag after bot moves
+        bot_x, bot_y = bot(bot_x, bot_y, player_x, player_y, obstacles)  # Update pozitie bot
+        player_moved = False  
     
     #Game over
     if (bot_x, bot_y) == (player_x, player_y):
             counter_text = font.render(f"Game Over", True, WHITE)
             screen.blit(counter_text, (350, 350))
             walking= False
+            
     # Actualizare display
     pygame.display.flip()
 
