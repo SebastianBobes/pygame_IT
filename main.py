@@ -138,7 +138,7 @@ while running:
     if (new_x, new_y) not in obstacles and (new_x, new_y) != (player_x, player_y):
             player_x, player_y = new_x, new_y
             steps += 1
-            player_moved = True  # Set player move flag
+            player_moved = True  
     else: 
         new_x, new_y = player_x, player_y
 
