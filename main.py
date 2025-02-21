@@ -1,6 +1,48 @@
 import pygame
 import random
 import os
+import psycopg2
+
+def get_player_name():
+    try:
+        with open("player.txt", "r") as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        print("Error: name.txt not found. Using default name.")
+        return "UnknownPlayer"
+    
+def get_player_score():
+    try:
+        with open("score.txt", "r") as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        print("Error: score.txt not found. Using default score.")
+        return 0 
+
+DATABASE_URL = "postgresql://postgres:ZDJjkcygCOzggEMnHlhvcNrAFMMmSoun@shinkansen.proxy.rlwy.net:59952/railway" 
+
+def connect_db():
+    """Connect to PostgreSQL database."""
+    try:
+        return psycopg2.connect(DATABASE_URL, sslmode="require")
+    except Exception as e:
+        print("Database Connection Error:", e)
+        return None
+
+def save_score_db(player_name, score):
+    """Save player score to the database."""
+    conn = connect_db()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO joc (nume, scor) VALUES (%s, %s)", (player_name, score))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            print(f"Score saved: {player_name} - {score}")
+        except Exception as e:
+            print("Error saving score:", e)
+
 
 # Initializare
 pygame.init()
@@ -46,6 +88,9 @@ def save_score(score):
         file.write(str(total_score))
     print(f"Score salvat: {total_score}")  #  Pentru debug
 
+player_name= get_player_name()
+score= get_player_score()
+
 # Atribute pentru caracter
 player_x, player_y = 0, 0 
 steps = 0
@@ -81,6 +126,8 @@ def bot_move(bot_x, bot_y, player_x, player_y, obstacles):
 running = True
 walking = True
 game_over = False  
+over=False
+k=1
 
 while running:
     screen.fill(BLACK)  
@@ -142,6 +189,12 @@ while running:
             
 
     # Afisare Game Over
+    if game_over and over==False and k==5:
+        game_over_text = font.render("Game Over", True, WHITE)
+        screen.blit(game_over_text, (WIDTH // 2 - 80, HEIGHT // 2))
+        save_score_db(player_name, score)
+        over=True
+    
     if game_over:
         game_over_text = font.render("Game Over", True, WHITE)
         screen.blit(game_over_text, (WIDTH // 2 - 80, HEIGHT // 2))
