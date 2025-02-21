@@ -19,7 +19,7 @@ def get_player_score():
         print("Error: score.txt not found. Using default score.")
         return 0 
 
-DATABASE_URL = "postgresql://postgres:ZDJjkcygCOzggEMnHlhvcNrAFMMmSoun@shinkansen.proxy.rlwy.net:59952/railway" 
+DATABASE_URL = "adresa_baza_date" 
 
 def connect_db():
     """Connect to PostgreSQL database."""
