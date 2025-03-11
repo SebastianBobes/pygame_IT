@@ -93,15 +93,15 @@ while running:
                 pygame.draw.rect(screen, BLUE, rect)  # Desenam obstacole
             pygame.draw.rect(screen, GRAY, rect, 1)  # Desenam conturul fiecarei casute
     
+    player_image = pygame.image.load("Capture.jpg") 
+    player_image = pygame.transform.scale(player_image, (CELL_SIZE, CELL_SIZE))
     # Afisare jucator
-    pygame.draw.rect(screen, WHITE, 
-        (player_x * CELL_SIZE, player_y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-    )
+    screen.blit(player_image, (player_x * CELL_SIZE, player_y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
     
+    bot_image = pygame.image.load("police.jpg")
+    bot_image = pygame.transform.scale(bot_image, (CELL_SIZE, CELL_SIZE))
     # Afisare bot
-    pygame.draw.rect(screen, RED, 
-        (bot_x * CELL_SIZE, bot_y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-    )
+    screen.blit(bot_image, (bot_x * CELL_SIZE, bot_y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
     
     # Afisare numar pasi
     counter_text = font.render(f"Steps: {steps}", True, WHITE)
