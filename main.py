@@ -206,13 +206,13 @@ while running:
    
     #Afisare castig
     if won and over==False and k==5:
-        won_text = font.render("Ai castigat!", True, WHITE)
+        won_text = font.render("You won!", True, WHITE)
         screen.blit(won_text, (WIDTH // 2 - 80, HEIGHT // 2))
         save_score_db(player_name, score)
         over=True
     
     if won:
-        won_text = font.render("Ai castigat!", True, WHITE)
+        won_text = font.render("You won!", True, WHITE)
         screen.blit(won_text, (WIDTH // 2 - 80, HEIGHT // 2))
     
     pygame.display.flip()
