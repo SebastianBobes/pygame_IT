@@ -22,7 +22,7 @@ def get_player_score():
         print("Error: score.txt not found. Using default score.")
         return 0
 
-DATABASE_URL = "adresa_baza_date"
+DATABASE_URL = "postgresql://postgres:IKZBSWcpRRodERnLHUKmdrIOiRrQFbwP@shortline.proxy.rlwy.net:44864/railway"
 
 def connect_db():
     try:
@@ -36,7 +36,7 @@ def save_score_db(player_name, score):
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO joc (nume, scor) VALUES (%s, %s)", (player_name, score))
+            cursor.execute("INSERT INTO punctaj (nume, punctaj) VALUES (%s, %s)", (player_name, score))
             conn.commit()
             cursor.close()
             conn.close()
@@ -210,6 +210,7 @@ while running:
         else:
             won_text = font.render("You won the game!", True, WHITE)
             screen.blit(won_text, (WIDTH // 2 - 150, HEIGHT // 2))
+            save_score_db(player_name, score)
             over = True
 
     pygame.display.flip()
