@@ -139,6 +139,8 @@ walking = True
 game_over = False
 won = False
 over = False
+game_over_text = None
+won_text = None
 
 while running:
     screen.fill(BLACK)
@@ -149,6 +151,9 @@ while running:
             if (col, row) in obstacles:
                 pygame.draw.rect(screen, BLUE, rect)
             pygame.draw.rect(screen, GRAY, rect, 1)
+    
+    highlight_rect = pygame.Rect(9 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+    pygame.draw.rect(screen, (255, 0, 0), highlight_rect, 3) 
 
     screen.blit(player_texture, (player_x * CELL_SIZE, player_y * CELL_SIZE))
     screen.blit(bot_texture, (bot_x * CELL_SIZE, bot_y * CELL_SIZE))
@@ -190,31 +195,38 @@ while running:
             won = True
             save_score(steps)
 
-    if game_over and not over:
-        game_over_text = font.render("Game Over", True, WHITE)
-        screen.blit(game_over_text, (WIDTH // 2 - 80, HEIGHT // 2))
-        save_score_db(player_name, load_score())
-        over = True
+    if game_over:
+        if not over:
+           game_over_text = font.render("Game Over", True, WHITE)
+           save_score_db(player_name, load_score())
+           over = True
+        if game_over_text:
+            screen.blit(game_over_text, (WIDTH // 2 - 80, HEIGHT // 2))
 
-    if won and not over:
-        if k < len(harti) - 1:
-            k += 1
-            player_x, player_y = 0, 0
-            bot_x, bot_y = 9, 9
-            steps = 0
-            obstacles.clear()
-            obstacles = creare_harti(k)
-            walking = True
-            game_over = False
-            won = False
-            over = False
-        else:
-            won_text = font.render("You won the game!", True, WHITE)
+
+    if won:
+       if not over:
+            if k < len(harti) - 1:
+                k += 1
+                player_x, player_y = 0, 0
+                bot_x, bot_y = 9, 9
+                steps = 0
+                obstacles.clear()
+                obstacles = creare_harti(k)
+                walking = True
+                game_over = False
+                won = False
+                over = False
+            else:
+                won_text = font.render("You won the game!", True, WHITE)
+                save_score_db(player_name, load_score())
+                over = True
+                screen.blit(won_text, (WIDTH // 2 - 150, HEIGHT // 2))
+       if won_text:
             screen.blit(won_text, (WIDTH // 2 - 150, HEIGHT // 2))
-            save_score_db(player_name, load_score())
-            over = True
-
     pygame.display.flip()
-    pygame.time.delay(100)
+    
+    if not game_over and not won:
+        pygame.time.delay(100)
 
 pygame.quit()
