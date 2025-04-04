@@ -46,7 +46,7 @@ def save_score_db(player_name, score):
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO punctaj (nume, punctaj) VALUES (%s, %s)", (player_name, score))
+            cursor.execute("INSERT INTO punctaj (nume, punctaj, nivel) VALUES (%s, %s, %s)", (player_name, score, k))
             conn.commit()
             cursor.close()
             conn.close()
