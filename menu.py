@@ -1,6 +1,8 @@
 import pygame
 import os
 import subprocess
+import sys
+#from save_utils import  get_player_name, load_score
 
 # Initializare Pygame
 pygame.init()
@@ -23,7 +25,7 @@ font = pygame.font.Font(None, 40)
 
 # Score File
 SCORE_FILE = "score.txt"
-
+#load_score()
 def load_score():
     """ Load score from file or return 0 if not available. """
     if os.path.exists(SCORE_FILE):
@@ -65,8 +67,14 @@ class Button:
 # Actiuni pentru butoane
 def start_game():
     """ Da run la main.py """
-    subprocess.run(["python", "main.py"])  # Da run la joc
-    pygame.quit()
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS  # where PyInstaller extracts bundled files
+    else:
+        base_path = os.path.abspath(".")
+
+    main_path = os.path.join(base_path, "main.py")
+    with open(main_path, 'r') as f:
+        exec(compile(f.read(), main_path, 'exec'), {'__name__': '__main__'})
 
 def quit_game():
     """ Quit """

@@ -3,18 +3,27 @@ import os
 import subprocess
 import sys
 
-# Initializare
-pygame.quit()  
-pygame.init()
+# Hidden path (Windows only)
+APPDATA = os.getenv('APPDATA')
+HIDDEN_DIR = os.path.join(APPDATA, 'game_data')
+os.makedirs(HIDDEN_DIR, exist_ok=True)
 
+PLAYER_FILE = os.path.join(HIDDEN_DIR, "player.txt")
 
-PLAYER_FILE = "player.txt"
-
-
+# Check if player.txt already exists
 if os.path.exists(PLAYER_FILE):
-    pygame.quit()
-    subprocess.Popen([sys.executable, "menu.py"]) 
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS  # PyInstaller temp folder
+    else:
+        base_path = os.path.abspath(".")
+
+    menu_path = os.path.join(base_path, "menu.py")
+    with open(menu_path, 'r') as f:
+        exec(compile(f.read(), menu_path, 'exec'), {'__name__': '__main__'})
     sys.exit()
+
+# Init pygame
+pygame.init()
 
 # Display
 WIDTH, HEIGHT = 600, 400
@@ -28,10 +37,10 @@ BLUE = (0, 0, 255)
 # Font
 font = pygame.font.Font(None, 36)
 
-# Player name
+# Player name input
 player_name = ""
 
-# Bucla principala
+# Game loop
 running = True
 while running:
     screen.fill(BLACK)
@@ -39,7 +48,6 @@ while running:
     title_text = font.render("Enter Your Name:", True, WHITE)
     screen.blit(title_text, (200, 100))
 
-    # Display input text
     name_text = font.render(player_name + "|", True, BLUE)
     screen.blit(name_text, (200, 150))
 
@@ -49,16 +57,21 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN and player_name.strip():
-                # Save player name
+                # Save the name
                 with open(PLAYER_FILE, "w") as file:
                     file.write(player_name.strip())
 
                 print(f"Player name '{player_name.strip()}' saved. Launching menu...")
 
-                pygame.display.quit()
                 pygame.quit()
-                
-                subprocess.Popen([sys.executable, "menu.py"])
+
+                if getattr(sys, 'frozen', False):
+                    base_path = sys._MEIPASS
+                else:
+                    base_path = os.path.abspath(".")
+
+                menu_path = os.path.join(base_path, "menu.py")
+                subprocess.Popen([sys.executable, menu_path])
                 sys.exit()
 
             elif event.key == pygame.K_BACKSPACE:

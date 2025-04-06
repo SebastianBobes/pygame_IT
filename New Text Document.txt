@@ -1,0 +1,1 @@
+python -m PyInstaller --onefile --windowed --add-data "menu.py;." --add-data "main.py;." --add-data "_psycopg.pyd;psycopg2" --add-data "harta1.txt;." --add-data "harta2.txt;." --add-data "harta3.txt;." --add-data "harta4.txt;." --add-data "harta5.txt;." --add-data "player.jpg;." --add-data "bot.jpg;." --hidden-import=psycopg2 setup.py
