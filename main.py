@@ -180,6 +180,7 @@ while running:
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             #running = False
             back_to_menu()
+            save_score_db(player_name, load_score())
 
     if walking and not game_over and not won:
         keys = pygame.key.get_pressed()
