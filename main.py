@@ -76,6 +76,17 @@ player_texture = pygame.transform.scale(player_texture, (CELL_SIZE, CELL_SIZE))
 bot_texture = pygame.image.load(os.path.join(base_path, "bot.jpg"))
 bot_texture = pygame.transform.scale(bot_texture, (CELL_SIZE, CELL_SIZE))
 
+def back_to_menu():
+    """ Da run la menu.py """
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS  # where PyInstaller extracts bundled files
+    else:
+        base_path = os.path.abspath(".")
+
+    menu_path = os.path.join(base_path, "menu.py")
+    with open(menu_path, 'r') as f:
+        exec(compile(f.read(), menu_path, 'exec'), {'__name__': '__main__'})
+
 def load_score():
     open(SCORE_FILE, "a").close()
     try:
@@ -167,7 +178,8 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-            running = False
+            #running = False
+            back_to_menu()
 
     if walking and not game_over and not won:
         keys = pygame.key.get_pressed()

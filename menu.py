@@ -24,17 +24,17 @@ BLUE = (0, 0, 255)
 font = pygame.font.Font(None, 40)
 
 # Score File
-SCORE_FILE = "score.txt"
+#SCORE_FILE = "score.txt"
 #load_score()
-def load_score():
-    """ Load score from file or return 0 if not available. """
-    if os.path.exists(SCORE_FILE):
-        try:
-            with open(SCORE_FILE, "r") as file:
-                return int(file.read().strip())
-        except ValueError:
-            return 0
-    return 0
+#def load_score():
+#    """ Load score from file or return 0 if not available. """
+ #   if os.path.exists(SCORE_FILE):
+  #      try:
+   #         with open(SCORE_FILE, "r") as file:
+    #            return int(file.read().strip())
+     #   except ValueError:
+      #      return 0
+   # return 0
 
 # Buton class
 class Button:
@@ -95,9 +95,9 @@ while running:
     screen.blit(title_text, (150, 50))
 
     # Afisare scor
-    score = load_score()
-    score_text = font.render(f"Total Score: {score}", True, BLUE)
-    screen.blit(score_text, (220, 100))
+   # score = load_score()
+   # score_text = font.render(f"Total Score: {score}", True, BLUE)
+   # screen.blit(score_text, (220, 100))
 
     # Deseneaza butoanele
     start_button.draw(screen)
